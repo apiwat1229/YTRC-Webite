@@ -1,0 +1,144 @@
+{% load static %}
+
+<!-- ❌ เอา .strv-reveal ออกจาก Section -->
+<section id="strv"
+         class="strv-outer"
+         data-max-width="1300px"
+         data-max-height="72vh"
+         data-aspect="16/9">
+
+  <div class="strv-head strv-fade">
+    <div>
+      <h3 class="strv-title">STR 20 — Video Showcase</h3>
+      <p class="strv-sub">Consistent quality, easy handling, and ready for mass production.</p>
+    </div>
+    <span class="strv-chip">Standard Thai Rubber (STR 20)</span>
+  </div>
+
+  <div class="strv-wrap strv-fade">
+    <video id="strvVideo" muted playsinline preload="metadata" loop>
+      <source src="{% static 'assets/home/robot.MP4' %}" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<style>
+/* ✅ Section พื้นหลังแบบ Static ไม่มี Effect */
+#strv{
+  --strv-max-width:1200px;
+  --strv-aspect:16/9;
+  --strv-max-h:65vh;
+  --strv-green:#1a4d2e;
+
+  position:relative;
+  width:100%;
+  padding-inline:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-inline:auto;
+  overflow:hidden;
+  z-index:20;
+}
+
+/* ✅ พื้นหลังนิ่ง 100% ไม่ Fade ไม่ Animate */
+#strv::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("{% static 'assets/home/bg-3.jpg' %}") center/cover no-repeat;
+  opacity:0.25;              /* จางเพื่อไม่กลบ Content */
+  z-index:-2;
+  pointer-events:none;
+}
+
+/* ✅ Overlay บางๆ เพื่อความคมชัด */
+#strv::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.03);
+  z-index:-1;
+  pointer-events:none;
+}
+
+/* ✅ กล่องหัว (Title + Subtitle) */
+#strv .strv-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:min(var(--strv-max-width),100%);
+  margin:0 auto .8rem;
+  padding:.65rem .9rem;
+  border-radius:1rem;
+  background:rgba(255,255,255,.56);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 12px 30px rgba(0,0,0,.07);
+}
+#strv .strv-title{ margin:0; color:var(--strv-green); font-weight:800; }
+#strv .strv-sub{ margin:0; color:#4b5b54; font-size:.95rem; opacity:.9; }
+#strv .strv-chip{
+  padding:.4rem .7rem; border-radius:999px;
+  background:#e8f3ed; color:var(--strv-green);
+  border:1px solid #d7e9df; font-weight:600; font-size:.8rem;
+}
+
+/* ✅ กรอบวิดีโอ + Hover Zoomขยายทั้งกรอบ */
+#strv .strv-wrap{
+  width:min(var(--strv-max-width),100%);
+  aspect-ratio:var(--strv-aspect);
+  max-height:var(--strv-max-h);
+  border-radius:1rem;
+  overflow:hidden;
+  position:relative;
+  background:#0f1311;
+  box-shadow:0 14px 38px rgba(0,0,0,.16);
+  transition:transform .45s ease, box-shadow .45s ease;
+}
+#strv .strv-wrap:hover{
+  transform:scale(1.1);
+  box-shadow:0 26px 70px rgba(0,0,0,.24);
+}
+#strv video{
+  position:absolute;
+  inset:0; width:100%; height:100%;
+  object-fit:cover;
+  filter:brightness(.9) contrast(1.03);
+}
+
+/* ✅ Fade-in Content (หัว + วิดีโอ เท่านั้น) */
+.strv-fade{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 2s ease, transform 2s ease;
+}
+.strv-fade.strv-show{
+  opacity:1; transform:translateY(0);
+}
+</style>
+
+<script>
+/* ✅ Fade-in เฉพาะ content (พื้นหลังไม่เกี่ยว) */
+document.addEventListener('DOMContentLoaded',()=>{
+  const elements = document.querySelectorAll('#strv .strv-fade');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('strv-show');
+      }
+    });
+  },{threshold:0.25});
+  elements.forEach(el=>io.observe(el));
+
+  /* ✅ Auto-play video only when section visible */
+  const video = document.getElementById('strvVideo');
+  const vio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ video.play().catch(()=>{}); }
+      else video.pause();
+    });
+  },{threshold:0.4});
+  vio.observe(document.getElementById('strv'));
+});
+</script>

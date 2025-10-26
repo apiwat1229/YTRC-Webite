@@ -1,0 +1,254 @@
+{% extends 'Base/base.html' %}
+{% load static %}
+
+{% block hero_content %}
+  {% include 'Base/navbar.html' %}
+
+  <div id="preloader">
+    <div class="preloader">
+      <span></span><span></span>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="image-cover hero-header full-height" data-overlay="5">
+    <video playsinline autoplay muted loop class="hero-video">
+      <source src="{% static 'assets/home/YTRC.mp4' %}" type="video/mp4" />YTRC-Footage.
+    </video>
+
+    <div class="container">
+      <div class="row justify-content-center align-items-center full-height">
+        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12">
+          <div class="position-relative text-center hero-text-container">
+            <h1 class="hero-title mb-4">Sustainable Rubber,<br />A Deforestation-Free Future</h1>
+            <p class="hero-subtitle fs-5 fw-light mb-5 px-lg-5">
+              <strong>Y.T. Rubber ( YTRC ), a YOKOHAMA Group company, is committed to operating in full compliance with EUDR to deliver high-quality rubber products that are traceable and 100% deforestation-free.</strong>
+            </p>
+            <a href="#company-profile" class="btn btn-primary btn-lg rounded-pill">Discover Our Commitment</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .hero-header {
+      position: relative;
+      z-index: 1;
+    }
+    
+    #company-profile,
+    #company-details {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+    
+    /* ---- CODE FOR OVERLAY ON #company-profile ---- */
+    #company-profile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(240, 247, 242, 0.8); /* สีขาวอมเขียว โปร่งใส 80% */
+      z-index: 1;
+    }
+    
+    /* ---- Corner Leaf Image Styles ---- */
+    .corner-leaf-img {
+      position: absolute;
+      top: -139px;
+      right: -150px;
+      width: 440px;
+      height: auto;
+      z-index: 2;
+      opacity: 0.7;
+    }
+    
+    #company-profile .container,
+    #company-details .container {
+      position: relative;
+      z-index: 3;
+    }
+    
+    /* ---- Image Frame Styles ---- */
+    .image-frame {
+      padding: 1rem;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 0.75rem;
+      transform: scale(0.95);
+    }
+    .image-frame img {
+      width: 100%;
+      border-radius: 0.5rem;
+      display: block;
+    }
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 3;
+    }
+    
+    /* ---- Styles for New Company Profile Section ---- */
+    #company-details {
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    #company-details::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+      z-index: 1;
+    }
+    
+    #company-details .missioncaps h2,
+    #company-details .missioncaps p {
+      color: #ffffff;
+    }
+    
+    #company-details .missioncaps p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    
+    .stats-card {
+      background: rgba(23, 63, 48, 0.75); /* Dark, semi-transparent green */
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      color: #ffffff;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+    }
+    
+    .stat-item:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+    
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-right: 1.5rem;
+      color: #a7e0c5; /* A light green for contrast */
+      flex-shrink: 0;
+    }
+    
+    .stat-text h3 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1;
+      color: #ffffff;
+    }
+    
+    .stat-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #ffffff;
+    }
+    
+    /* --- Styles for Logos --- */
+    .partner-logos {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .partner-logos img {
+      width: auto;
+      opacity: 0.9;
+    }
+    .partner-logos .ytrc-logo {
+      max-height: 30px;
+    }
+    .partner-logos .yokohama-logo {
+      max-height: 30px;
+    }
+    
+    /* ---- ANIMATION STYLES ---- */
+    .animate-on-scroll {
+      opacity: 0;
+      transition: opacity 2.5s ease-out, transform 2.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    .animate-on-scroll.fade-in {
+      transition: opacity 2s ease-out;
+    }
+    
+    .slide-in-right {
+      position: relative;
+      transform: translateX(600px);
+    }
+    
+    .slide-in-left {
+      position: relative;
+      transform: translateX(-600px);
+    }
+    
+    .animate-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  </style>
+
+  {% include 'pages/homepage/components/vision_mission.html' %}
+
+  {% include 'pages/homepage/components/company_details.html' %}
+  {% include 'pages/homepage/components/products_section.html' %}
+  {% include 'pages/homepage/components/str_video_showcase.html' %}
+
+  {% include 'Base/footer.html' %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Preloader script
+      const preloader = document.getElementById('preloader')
+      if (preloader) {
+        window.addEventListener('load', () => {
+          preloader.style.display = 'none'
+        })
+      }
+    
+      // Animation on scroll script
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.2
+      }
+    
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+          } else {
+            entry.target.classList.remove('is-visible')
+          }
+        })
+      }, observerOptions)
+    
+      const elementsToAnimate = document.querySelectorAll('.animate-on-scroll')
+      elementsToAnimate.forEach((el) => {
+        observer.observe(el)
+      })
+    })
+  </script>
+{% endblock %}

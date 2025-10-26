@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="ListingHub - Django Business Directory & Listing Template" />
+    <meta name="author" content="Shreethemes" />
+
+    <title>YTRC</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.png' %}" />
+
+    <!-- All Plugins -->
+    <link href="{% static 'assets/css/animation.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/dropzone.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/rome.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/owl.carousel.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/owl.theme.default.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/rangeSlider.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/select2.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/magnific-popup.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/prism.css' %}" rel="stylesheet" />
+
+    <!-- Icons CSS -->
+    <link href="{% static 'assets/css/fontawesome.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/bootstrap-icons.css' %}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css" />
+  </head>
+
+  <body>
+    <div id="main-wrapper">
+      <main>
+        {% block hero_content %}
+          {{ hero_content }}
+        {% endblock %}
+      </main>
+    </div>
+    <!-- End Wrapper -->
+
+    <!-- Back to top -->
+    <a href="#" class="btn-primary back-to-top" id="back2Top"><i class="bi bi-arrow-up"></i></a>
+    <!-- Back to top -->
+
+    <!-- All Jquery -->
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/js/popper.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/dropzone.min.js' %}"></script>
+
+    <!-- Waypoints Library -->
+    <script src="https://cdn.jsdelivr.net/npm/waypoints@4.0.1/lib/noframework.waypoints.min.js"></script>
+
+    <script src="{% static 'assets/js/counterup.min.js' %}"></script>
+    <script src="{% static 'assets/js/rangeslider.js' %}"></script>
+    <script src="{% static 'assets/js/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'assets/js/rome.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/addadult.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+    <!-- Morris.js charts -->
+    <script src="{% static 'assets/js/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'assets/js/morris.js/morris.min.js' %}"></script>
+    <!-- Custom Chart JavaScript -->
+    <script src="{% static 'assets/js/custom/dashboard.js' %}"></script>
+
+    <!-- Map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_8C7p0Ws2gUu7wo0b6pK9Qu7LuzX2iWY&amp;libraries=places&amp;"></script>
+    <script src="{% static 'assets/js/map/map_infobox.js' %}"></script>
+    <script src="{% static 'assets/js/map/markerclusterer.js' %}"></script>
+    <script src="{% static 'assets/js/map/map.js' %}"></script>
+    <!-- This page plugins -->
+
+    <script>
+      try {
+        const counters = document.querySelectorAll('.counter-value')
+        const speed = 2500 // The lower the slower
+      
+        counters.forEach((counter) => {
+          const updateCount = () => {
+            const target = +counter.getAttribute('data-target')
+            const count = +counter.innerText
+      
+            // Calculate increment to reach target in the given speed
+            let inc = target / speed
+      
+            // Make sure increment is at least 1
+            if (inc < 1) inc = 1
+      
+            // If the counter hasn't reached the target, update it
+            if (count < target) {
+              counter.innerText = Math.min(count + inc, target).toFixed(0) // Ensure not exceeding target
+              // Use requestAnimationFrame for smoother and better performance
+              requestAnimationFrame(updateCount)
+            } else {
+              counter.innerText = target // Set to target when done
+            }
+          }
+      
+          updateCount()
+        })
+      } catch (err) {
+        console.error('Error in counter script:', err) // Log any errors for debugging
+      }
+    </script>
+
+    <script>
+      function openFilterSearch() {
+        document.getElementById('filter_search').style.display = 'block'
+      }
+      function closeFilterSearch() {
+        document.getElementById('filter_search').style.display = 'none'
+      }
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $('#showbutton').click(function () {
+          $('#showing').slideToggle('slow')
+        })
+      })
+    </script>
+
+    <script>
+      window.onscroll = function () {
+        scrollFunction()
+      }
+      
+      function scrollFunction() {
+        const mybutton = document.getElementById('back2Top') // ← แก้ให้ตรง id
+        if (mybutton !== null) {
+          if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+            mybutton.classList.add('block')
+            mybutton.classList.remove('hidden')
+          } else {
+            mybutton.classList.add('hidden')
+            mybutton.classList.remove('block')
+          }
+        }
+      }
+      
+      function topFunction() {
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+      }
+    </script>
+  </body>
+</html>

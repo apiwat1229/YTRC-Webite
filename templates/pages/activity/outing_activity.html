@@ -1,0 +1,107 @@
+{% extends 'Base/base.html' %}
+{% load static %}
+
+{% block hero_content %}
+  {% include 'Base/navbar_activity.html' %}
+
+  <section class="activity-layout">
+    <div class="activity-grid">
+      <!-- LEFT -->
+      <aside class="activity-sidebar">
+        <header class="sidebar-head">
+          <h1 class="sidebar-title">{{ activity.name }}</h1>
+          {% if activity.subtitle %}<p class="sidebar-sub">{{ activity.subtitle }}</p>{% endif %}
+        </header>
+
+        <div class="activity-accordion" id="acc">
+          {% for s in sections %}
+          <article class="acc-item {% if forloop.first %}is-open{% endif %}" data-key="sec{{ s.id }}">
+            <button class="acc-trigger" type="button">
+              <div class="acc-left">
+                {% if s.year %}<span class="acc-badge">{{ s.year }}</span>{% endif %}
+                <span class="acc-title">{{ s.title }}</span>
+              </div>
+              <i class="bi bi-chevron-down acc-caret"></i>
+            </button>
+            <div class="acc-panel">
+              <ul class="acc-meta">
+                {% if s.location %}<li><i class="bi bi-geo-alt"></i> {{ s.location }}</li>{% endif %}
+                {% if s.participants %}<li><i class="bi bi-people"></i> ผู้เข้าร่วม ~ {{ s.participants }} คน</li>{% endif %}
+                {% if s.date_range %}<li><i class="bi bi-calendar-event"></i> {{ s.date_range }}</li>{% endif %}
+              </ul>
+              {% if s.description %}<p>{{ s.description }}</p>{% endif %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </aside>
+
+      <!-- RIGHT -->
+      <div class="activity-gallery" id="gallery"></div>
+    </div>
+  </section>
+
+  <!-- ส่งข้อมูล sections + images ไปให้ JS -->
+  {{ sections_data|json_script:"sections-data" }}
+
+  <style>
+    .activity-layout { width:100%; padding-top:90px; }
+    .activity-grid { width:min(95vw,1440px); margin:auto; display:grid; grid-template-columns:360px 1fr; gap:24px; }
+    .activity-sidebar{ background:#fff; border-radius:16px; padding:18px; height:calc(100vh - 120px); position:sticky; top:90px; overflow-y:auto; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .sidebar-head{ margin:2px 2px 12px; }
+    .sidebar-title{ font-size:22px; font-weight:800; margin:0 0 4px; }
+    .sidebar-sub{ font-size:13px; color:#6b7280; margin:0; }
+    .activity-accordion{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+    .acc-item{ border:1px solid #eef1f4; border-radius:14px; overflow:hidden; background:#fafbfc; }
+    .acc-trigger{ width:100%; background:transparent; border:0; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; cursor:pointer; }
+    .acc-left{ display:flex; align-items:center; gap:8px; text-align:left; }
+    .acc-badge{ font-size:11px; font-weight:700; color:#0f5132; background:#d1fae5; border:1px solid #10b981; border-radius:999px; padding:3px 8px; line-height:1; }
+    .acc-title{ font-size:13px; font-weight:700; color:#1a1d21; line-height:1.35; }
+    .acc-caret{ transition:transform .2s ease; color:#6b7280; }
+    .acc-item.is-open .acc-caret{ transform:rotate(180deg); }
+    .acc-panel{ display:none; padding:10px 14px 14px; background:#fff; border-top:1px solid #eef1f4; }
+    .acc-item.is-open .acc-panel{ display:block; }
+    .acc-panel p{ font-size:13px; color:#4b5563; margin:8px 0 0; line-height:1.65; }
+    .acc-meta{ list-style:none; padding:0; margin:0; display:grid; gap:6px; font-size:13px; color:#374151; }
+    .acc-meta i{ margin-right:6px; color:#059669; }
+    .activity-gallery{ display:flex; flex-direction:column; gap:20px; }
+    .activity-gallery figure{ margin:0; border-radius:20px; overflow:hidden; background:#eee; }
+    .activity-gallery img{ display:block; width:100%; height:auto; object-fit:cover; }
+    .activity-gallery figure.portrait img{ height:70vh; object-fit:cover; }
+    @media (max-width:1024px){ .activity-grid{ grid-template-columns:1fr; } .activity-sidebar{ position:relative; height:auto; top:auto; } }
+  </style>
+
+  <script>
+    (function(){
+      const galleryEl = document.getElementById('gallery');
+      const acc = document.getElementById('acc');
+      const sections = JSON.parse(document.getElementById('sections-data').textContent);
+
+      function byKey(key){ return sections.find(s => s.key === key); }
+
+      function renderGallery(key){
+        const sec = byKey(key) || sections[0] || {images:[]};
+        const html = (sec.images || []).map(img => {
+          const cls = img.portrait ? 'portrait' : '';
+          return `<figure class="${cls}"><img src="${img.url}" alt="${img.alt || ''}" loading="lazy"></figure>`;
+        }).join('');
+        galleryEl.innerHTML = html;
+        galleryEl.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      if(sections.length){ renderGallery(sections[0].key); }
+
+      acc.addEventListener('click', (e)=>{
+        const btn = e.target.closest('.acc-trigger');
+        if(!btn) return;
+        const item = btn.closest('.acc-item');
+        const key = item?.dataset?.key;
+
+        acc.querySelectorAll('.acc-item').forEach(el => el.classList.remove('is-open'));
+        item.classList.add('is-open');
+
+        if(key) renderGallery(key);
+      });
+    })();
+  </script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% load static %}
+<!-- Start Navigation (HOME Transparent) -->
+<div class="header header-transparent dark navdark home-nav" data-sticky-element="">
+  <div class="container-fluid">
+    <nav id="navigation" class="navigation navigation-landscape">
+      <div class="nav-header">
+        <a class="nav-brand" href="/"><img id="site-logo" src="{% static 'assets/img/logo-light.png' %}" class="logo" alt="" style="width:120px;height:auto;"></a>
+        <div class="nav-toggle"></div>
+      </div>
+
+      <div class="nav-menus-wrapper">
+        <ul class="nav-menu">
+          <li><a href="/" class="home-link">Home</a></li>
+
+          <!-- Activity (จาก DB) -->
+          <li>
+            <a href="javascript:void(0);" class="home-link">Activity <span class="submenu-indicator"></span></a>
+            <ul class="nav-dropdown nav-submenu">
+              {% for item in menu_activity %}
+                {% with href=item.resolved_href target=item.open_new_tab|yesno:"_blank,_self" %}
+                  <li><a href="{{ href }}" target="{{ target }}">{{ item.label }}</a></li>
+                {% endwith %}
+              {% empty %}
+                  <li><a href="javascript:void(0);" class="text-muted">ยังไม่มีรายการ</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+
+          <!-- CSR (จาก DB) -->
+          <li>
+            <a href="javascript:void(0);" class="home-link">CSR <span class="submenu-indicator"></span></a>
+            <ul class="nav-dropdown nav-submenu">
+              {% for item in menu_csr %}
+                {% with href=item.resolved_href target=item.open_new_tab|yesno:"_blank,_self" %}
+                  <li><a href="{{ href }}" target="{{ target }}">{{ item.label }}</a></li>
+                {% endwith %}
+              {% empty %}<li><a class="text-muted" href="javascript:void(0);">ยังไม่มีรายการ</a></li>{% endfor %}
+            </ul>
+          </li>
+
+          <!-- Careers (จาก DB) -->
+          <li>
+            <a href="javascript:void(0);" class="home-link">Careers <span class="submenu-indicator"></span></a>
+            <ul class="nav-dropdown nav-submenu">
+              {% for item in menu_careers %}
+                {% with href=item.resolved_href target=item.open_new_tab|yesno:"_blank,_self" %}
+                  <li><a href="{{ href }}" target="{{ target }}">{{ item.label }}</a></li>
+                {% endwith %}
+              {% empty %}<li><a class="text-muted" href="javascript:void(0);">ยังไม่มีรายการ</a></li>{% endfor %}
+            </ul>
+          </li>
+
+          <li><a href="/contact-us/" class="contact-us-link">Contact Us</a></li>
+        </ul>
+
+        <ul class="nav-menu nav-menu-social align-to-right">
+          <li class="list-buttons"><a href="/admin/"><i class="bi bi-person-circle fs-6 me-1"></i>Login</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<style>
+.home-nav, .home-nav * { box-shadow:none!important; }
+.home-nav, .home-nav .navigation, .home-nav .nav-menus-wrapper { background:transparent!important; border:0!important; }
+.home-nav .nav-menu > li > a { color:#fff!important; text-shadow:0 1px 2px rgba(0,0,0,.25); }
+.home-nav .nav-menu > li > a:hover, .home-nav .nav-menu > li > a.active { color:#f3f4f6!important; }
+.home-nav.is-sticky, .home-nav.is-sticky .navigation, .home-nav.is-sticky .nav-menus-wrapper { background:transparent!important; border:0!important; box-shadow:none!important; }
+.home-nav .nav-dropdown.nav-submenu { background:#fff!important; border:1px solid rgba(0,0,0,.06)!important; box-shadow:0 10px 24px rgba(0,0,0,.10)!important; }
+.home-nav .nav-dropdown.nav-submenu a { color:#111827!important; }
+.text-muted{ color:#6b7280; }
+</style>
+
+<script>
+  document.addEventListener('scroll', () => {
+    const hdr = document.querySelector('.home-nav');
+    if (!hdr) return;
+    if (hdr.classList.contains('nav-fixed') || hdr.classList.contains('sticky')) {
+      hdr.classList.add('is-sticky');
+    } else {
+      hdr.classList.remove('is-sticky');
+    }
+  }, {passive:true});
+
+  (function(){
+    const currentPath = window.location.pathname.replace(/\/$/, '');
+    document.querySelectorAll('.nav-menu a[href]').forEach((link) => {
+      const path = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '');
+      if (path === currentPath) link.classList.add('active');
+    });
+  })();
+</script>

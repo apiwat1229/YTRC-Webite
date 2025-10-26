@@ -1,0 +1,241 @@
+{% load static %}
+
+<section id="ps-products" class="ps-shell">
+
+  <!-- ✅ ต้นยาง (Background ซ้าย ลึกที่สุด + มีเอฟเฟกต์สไลด์) -->
+  <img src="{% static 'assets/home/rubber-tree.png' %}"
+       class="ps-tree-left ps-tree-anim" alt="Rubber Tree">
+
+  <div class="container">
+    <div class="ps-row ps-reveal">
+      <!-- ✅ ฝั่งข้อความ (อยู่ในกรอบสีแดงตรงกลางคอลัมน์) -->
+      <div class="ps-text ps-reveal-left">
+        <div class="ps-text-box">
+          <h2 class="ps-title">Our Products</h2>
+          <h4 class="ps-subtitle">Standard Thai Rubber (STR 20)</h4>
+          <p class="ps-desc">
+            STR 20 is a high-quality block rubber made primarily from cup lump and unsmoked sheet. The production process involves cleaning, cutting, creping, shredding, and drying to ensure consistent quality.
+            Renowned for its stability, easy handling, and cost efficiency, STR 20 is widely used in the tire manufacturing industry and is ideal for large-scale production.
+          </p>
+        </div>
+      </div>
+
+      <!-- ✅ ฝั่งรูป STR + ใบไม้ลอย + แผ่นยางขวา -->
+      <div class="ps-image-wrap ps-reveal-right">
+        <div class="ps-image-frame">
+          <img class="ps-img-base" src="{% static 'assets/home/str-1.png' %}" alt="STR 20 Block">
+        </div>
+
+        <!-- ใบไม้ลอย -->
+        <img src="{% static 'assets/home/leaf.png' %}" class="ps-leaf-top" alt="Leaf Decor">
+        <img src="{% static 'assets/home/leaf.png' %}" class="ps-leaf-bottom" alt="Leaf Decor">
+
+        <!-- Hover Zoom ของก้อนยาง (ซ้อนทับ) -->
+        <img class="ps-img-float" src="{% static 'assets/home/str-1.png' %}" alt="">
+
+        <!-- ✅ แผ่นยางด้านขวา (เฟดอิน) -->
+        <img src="{% static 'assets/home/rubber-sheet.png' %}"
+             class="ps-sheet-right ps-sheet-anim" alt="Rubber Sheet">
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* =============== MAIN WRAPPER =============== */
+#ps-products{
+  --ps-green:#1a4d2e;
+  position: relative;
+  padding: 3rem 0 2.5rem;
+  overflow: hidden;
+}
+
+/* ✅ พื้นหลังภาพเต็มพื้นที่แบบนิ่งและจาง (ไม่มีเอฟเฟกต์เคลื่อนไหว) */
+#ps-products::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: url("{% static 'assets/home/bg-3.jpg' %}") center / cover no-repeat;
+  opacity:.18;             /* ความจางของพื้นหลัง */
+  z-index:-3;              /* หลังสุด */
+  pointer-events:none;
+}
+
+/* ✅ ต้นยางซ้าย (อยู่ลึก แต่เหนือพื้นหลัง) */
+#ps-products .ps-tree-left{
+  position:absolute;
+  left:-140px;
+  top:45%;
+  transform:translateY(-50%);
+  width:960px;
+  opacity:.90;
+  z-index:-1;
+  pointer-events:none;
+}
+
+/* เอฟเฟกต์สไลด์สำหรับต้นยาง (ทำงานเข้า/ออกทุกครั้ง) */
+#ps-products .ps-tree-anim{
+  opacity:0;
+  transform: translate(-80px, -50%);
+  transition: opacity 900ms ease, transform 900ms cubic-bezier(.2,.8,.2,1);
+}
+#ps-products .ps-tree-anim.is-in{
+  opacity:.90;
+  transform: translate(0, -50%);
+}
+
+/* =============== LAYOUT =============== */
+#ps-products .ps-row{
+  display:flex;
+  align-items:center;
+  gap:2rem;
+  margin-bottom:2.5rem;
+}
+#ps-products .ps-text{ flex:1; }
+#ps-products .ps-image-wrap{
+  flex:1; position:relative; z-index:50;
+}
+
+/* ✅ กล่องข้อความ “กรอบสีแดง” จัดกลางคอลัมน์ */
+#ps-products .ps-text-box{
+  max-width: 640px;
+  margin: 0 auto;                 /* จัดกลางแนวนอนในคอลัมน์ข้อความ */
+  padding: 32px 40px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.55); /* พื้นหลังบาง ๆ ให้อ่านง่าย */
+  backdrop-filter: blur(3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+#ps-products .ps-title{
+  font-size:2rem; font-weight:800; color:var(--ps-green); margin:0 0 .5rem;
+}
+#ps-products .ps-subtitle{
+  font-size:1.25rem; font-weight:700; margin:0 0 .9rem; color:#243;
+}
+#ps-products .ps-desc{
+  color:#4b4b4b; line-height:1.75; margin:0;
+  font-size:1.05rem;
+}
+
+/* =============== IMAGE AREA =============== */
+/* ลดขนาดรูปก้อนยางลงเล็กน้อยและชิดขวาอย่างมีระยะ */
+#ps-products .ps-image-frame{
+  max-width: 620px;               /* ← ลดขนาดสูงสุดของกรอบรูป */
+  margin-left: auto;              /* ดันไปทางขวา */
+  border-radius: 18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
+}
+#ps-products .ps-img-base{ width:100%; display:block; }
+
+/* Hover Zoom (เลื่อนผ่านเมาส์) */
+#ps-products .ps-img-float{
+  position:absolute; top:50%; left:50%;
+  width:100%; transform:translate(-50%,-50%) scale(1);
+  opacity:0; pointer-events:none;
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,.35));
+  transition:transform .35s ease, opacity .3s ease;
+  z-index:200;
+}
+#ps-products .ps-image-wrap:hover .ps-img-float{
+  opacity:1; transform:translate(-48%,-50%) scale(1.22);
+}
+
+/* ใบไม้มี motion เบา ๆ */
+#ps-products .ps-leaf-top{
+  position:absolute; top:-20px; left:-30px; width:110px;
+  pointer-events:none; z-index:150;
+  animation: leafSwayTop 6s ease-in-out infinite;
+}
+#ps-products .ps-leaf-bottom{
+  position:absolute; bottom:-60px; right:-100px; width:150px;
+  pointer-events:none; z-index:150;
+  animation: leafSwayBottom 7s ease-in-out infinite;
+}
+@keyframes leafSwayTop{
+  0% { transform:rotate(10deg); }
+  50%{ transform:rotate(20deg) translateY(4px); }
+  100%{ transform:rotate(10deg); }
+}
+@keyframes leafSwayBottom{
+  0% { transform:rotate(-20deg); }
+  50%{ transform:rotate(-30deg) translateY(-4px); }
+  100%{ transform:rotate(-20deg); }
+}
+
+/* ✅ Rubber sheet ด้านขวา (เฟดอิน ทำงานเข้า/ออกทุกครั้ง) */
+#ps-products .ps-sheet-right{
+  position:absolute;
+  right:-300px;
+  top:25%;
+  transform:translateY(-50%);
+  width:380px;
+  opacity:0.7;
+  pointer-events:none;
+  z-index:-1;
+}
+#ps-products .ps-sheet-anim{
+  opacity:0;
+  transform: translate(40px, -50%);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+#ps-products .ps-sheet-anim.is-in{
+  opacity:.7;
+  transform: translate(0, -50%);
+}
+
+/* Fade-in block เดิม (ทำงานทุกครั้งเข้า/ออก) */
+#ps-products .ps-reveal{
+  opacity:0; transform:translateY(40px);
+  transition:all 1.2s ease;
+}
+#ps-products .ps-reveal.ps-show{
+  opacity:1; transform:translateY(0);
+}
+
+/* =============== Responsive =============== */
+@media (max-width: 1200px){
+  #ps-products .ps-image-frame{ max-width: 560px; }
+}
+@media (max-width: 992px){
+  #ps-products .ps-row{ flex-direction:column; }
+  #ps-products .ps-image-frame{ max-width: 680px; margin: 0 auto; }
+  #ps-products .ps-text-box{ max-width: 720px; }
+}
+@media (max-width: 768px){
+  #ps-products .ps-tree-left{ display:none; }
+  #ps-products .ps-sheet-right{ display:none; }
+  #ps-products .ps-text-box{ padding:24px 22px; }
+}
+</style>
+
+<script>
+
+      document.addEventListener('DOMContentLoaded',()=>{
+        /* ===== Fade-in ของบล็อกเนื้อหา: ทำงานทุกครั้งที่เข้า/ออก viewport ===== */
+        const blocks = document.querySelectorAll('#ps-products .ps-reveal');
+        const blockIO = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            e.target.classList.toggle('ps-show', e.isIntersecting);
+          });
+        }, { threshold: 0.2 });
+        blocks.forEach(el=>blockIO.observe(el));
+
+        /* ===== เอฟเฟกต์ต้นยาง & rubber sheet: เข้า/ออกแล้วเล่นซ้ำได้ ===== */
+        const scope = document.getElementById('ps-products');
+        const tree  = scope.querySelector('.ps-tree-anim');
+        const sheet = scope.querySelector('.ps-sheet-anim');
+
+        const duoIO = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            const on = e.isIntersecting;
+            if (tree)  tree.classList.toggle('is-in', on);
+            if (sheet) sheet.classList.toggle('is-in', on);
+          });
+        }, { threshold: 0.15 });
+        duoIO.observe(scope);
+      });
+      
+</script>

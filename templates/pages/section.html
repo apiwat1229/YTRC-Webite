@@ -1,0 +1,267 @@
+{% extends 'Base/base.html' %}
+{% load static %}
+
+{% block hero_content %}
+  {# ใช้ navbar2 (โปร่งใสจริง ๆ ไม่กวนพื้นหลัง) #}
+  {% include 'Base/navbar2.html' %}
+
+  <section id="act" class="act">
+    <div class="act-shell">
+      <!-- LEFT: การ์ดคำอธิบาย (เล็กลง + เลื่อนภายในได้) -->
+      <aside class="act-left">
+        {% if breadcrumb %}
+          <nav class="act-breadcrumb" aria-label="breadcrumb">
+            {% for bc in breadcrumb %}
+              <span class="crumb {% if forloop.last %}is-last{% endif %}">{{ bc }}</span>
+              {% if not forloop.last %}
+                <span class="sep">/</span>
+              {% endif %}
+            {% endfor %}
+          </nav>
+        {% endif %}
+
+        <h1 class="act-title">{{ page_title|default:'Activity' }}</h1>
+        <p class="act-intro">{{ page_intro|default:'' }}</p>
+
+        {# เนื้อหาเพิ่ม (ยาวได้ การ์ดจะมีสกอร์ลภายใน) #}
+        {% if body %}
+          {% for blk in body %}
+            {% if blk.type == 'p' %}
+              <p class="act-p">{{ blk.text }}</p>
+            {% endif %}
+            {% if blk.type == 'ul' %}
+              <ul class="act-ul">
+                {% for li in blk.items %}
+                  <li>{{ li }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p class="act-p">ตัวอย่างเนื้อหา… เราสามารถเลื่อนอ่านภายในการ์ดนี้ได้โดยที่เลย์เอาต์หลักไม่กระดิก</p>
+          <ul class="act-ul">
+            <li>การ์ดเล็กลง (กว้างคงที่)</li>
+            <li>สกอร์ลภายในเมื่อเนื้อหาเกิน</li>
+            <li>แกลเลอรีขวาเต็มจอ ชิดบนสุด</li>
+          </ul>
+        {% endif %}
+      </aside>
+
+      <!-- RIGHT: แกลเลอรีสูงเต็มจอ ชิดบนสุด (เลื่อนขึ้นลง) -->
+      <section class="act-right">
+        <div class="vslider" id="vslider">
+          <div class="vtrack" id="vtrack">
+            {% if gallery %}
+              {% for g in gallery %}
+                <figure class="vslide">
+                  <img src="{{ g.url }}" alt="{{ g.alt|default:'gallery image' }}" />
+                  {% if g.caption %}
+                    <figcaption>{{ g.caption }}</figcaption>
+                  {% endif %}
+                </figure>
+              {% endfor %}
+            {% else %}
+              {# ตัวอย่างรูปจากอินเทอร์เน็ต (Unsplash) #}
+              <figure class="vslide">
+                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop" alt="Mountains" />
+                <figcaption>Outing – Mountains</figcaption>
+              </figure>
+              <figure class="vslide">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop" alt="Forest" />
+                <figcaption>Team Walk – Forest</figcaption>
+              </figure>
+              <figure class="vslide">
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1920&auto=format&fit=crop" alt="Beach" />
+                <figcaption>Beach – Sunset</figcaption>
+              </figure>
+              <figure class="vslide">
+                <img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=1920&auto=format&fit=crop" alt="City night" />
+                <figcaption>Night Hangout</figcaption>
+              </figure>
+            {% endif %}
+          </div>
+
+          <button class="vctrl v-up" aria-label="Previous"><i class="bi bi-chevron-up"></i></button>
+          <button class="vctrl v-down" aria-label="Next"><i class="bi bi-chevron-down"></i></button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <style>
+    /* ===== Navbar overlay โปร่งใสจริง ๆ ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      z-index: 1000;
+    }
+    /* (ถ้าต้องการให้เมนูอ่านง่ายขึ้นบนรูปสว่าง ให้ใช้สีเข้ม) */
+    .navigation .nav-menu > li > a {
+      color: #101418 !important;
+      font-weight: 600;
+    }
+    .nav-brand img.logo {
+      width: 120px;
+      height: auto;
+    }
+    
+    /* ===== Layout รวม ===== */
+    #act {
+      width: 100%;
+      padding-top: 0;
+    }
+    .act-shell {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: minmax(260px, 340px) 1fr; /* ซ้ายเล็กลง ขวากว้างขึ้น */
+      width: min(98vw, 1680px);
+      margin-inline: auto;
+      padding-inline: 12px;
+      align-items: flex-start;
+      margin-top: calc(72px + 10px); /* ดันเฉพาะฝั่งซ้ายไม่ให้ชน navbar */
+    }
+    
+    /* ===== LEFT Card (เล็ก + scroll ภายใน) ===== */
+    .act-left {
+      background: #fff;
+      padding: 18px 18px 20px 16px;
+      border-radius: 14px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+    }
+    .act-breadcrumb {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.35rem;
+    }
+    .act-breadcrumb .sep {
+      margin: 0 0.45rem;
+      color: #a0a6ad;
+    }
+    .act-breadcrumb .crumb.is-last {
+      color: #111827;
+      font-weight: 600;
+    }
+    .act-title {
+      margin: 6px 0 8px;
+      font-size: 1.9rem;
+      line-height: 1.25;
+      font-weight: 800;
+      color: #1e3a2f;
+    }
+    .act-intro {
+      margin: 0 0 12px;
+      color: #42514a;
+    }
+    .act-p {
+      color: #374151;
+      line-height: 1.7;
+      margin: 0 0 0.8rem;
+    }
+    .act-ul {
+      margin: 0.2rem 0 0.8rem 1.1rem;
+      color: #374151;
+    }
+    .act-ul li {
+      margin: 0.25rem 0;
+    }
+    
+    /* ===== RIGHT Gallery (เต็มจอ ชิดบน ไม่มีขอบ) ===== */
+    .act-right {
+      margin-top: 0;
+    }
+    .vslider {
+      position: relative;
+      height: 100vh;
+      border: none;
+      border-radius: 0;
+      background: #000;
+      overflow: hidden;
+    }
+    .vtrack {
+      height: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scroll-snap-type: y mandatory;
+    }
+    .vslide {
+      height: 100%;
+      scroll-snap-align: start;
+      position: relative;
+    }
+    .vslide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .vslide figcaption {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    
+    /* ปุ่มเลื่อน */
+    .vctrl {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .v-up {
+      top: 10px;
+    }
+    .v-down {
+      bottom: 10px;
+    }
+    
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) {
+      .act-shell {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: calc(64px + 8px);
+      }
+      .act-left {
+        max-height: none;
+      }
+      .vslider {
+        height: 60vh;
+      }
+    }
+  </style>
+
+  <script>
+    /* ปุ่มเลื่อนสไลด์แนวตั้ง */
+    ;(function () {
+      const slider = document.getElementById('vslider')
+      const track = document.getElementById('vtrack')
+      if (!slider || !track) return
+      const up = document.querySelector('.v-up')
+      const down = document.querySelector('.v-down')
+      const step = () => slider.clientHeight
+      const go = (dir) => track.scrollBy({ top: dir * step(), behavior: 'smooth' })
+      up?.addEventListener('click', () => go(-1))
+      down?.addEventListener('click', () => go(1))
+    })()
+  </script>
+{% endblock %}
