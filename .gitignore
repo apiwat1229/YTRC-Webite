@@ -1,17 +1,45 @@
-# Python
+# --- Python ---
 __pycache__/
-*.pyc
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
 
-# Virtual Environment
+# --- Virtual Envs ---
 .env/
+.venv/
+venv/
+ENV/
 
-# Django migrations cache
+# --- Django / Project Artifacts ---
 db.sqlite3
-
-# Media & Static (ถ้าสร้างขึ้นในอนาคต)
+*.sqlite3
+*.log
 media/
-staticfiles/
+staticfiles/         # โฟลเดอร์ปลายทาง collectstatic (ไม่ต้องขึ้น git)
+# หากอยากให้มีโฟลเดอร์ว่างบน git: สร้าง media/.gitkeep และ staticfiles/.gitkeep แล้วเอา two บรรทัดบนออกก็ได้
 
-# VS Code / IDE
+# --- Node / Frontend (ถ้ามี) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# --- IDE / Editor ---
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Tests / Coverage (ถ้ามี) ---
+.coverage
+htmlcov/
+.pytest_cache/
+
+# --- Docker (ถ้ามี) ---
+docker-compose.override.yml
